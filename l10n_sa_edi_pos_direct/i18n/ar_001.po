@@ -126,7 +126,7 @@ msgstr "تم توليدها محلياً"
 #: code:addons/l10n_sa_edi_pos_direct/l10n_sa_edi_pos_direct/static/src/overrides/components/order_receipt/order_receipt.xml:0
 #: code:addons/l10n_sa_edi_pos_direct/static/src/overrides/components/order_receipt/order_receipt.xml:0
 msgid "Generated in compliance with ZATCA requirements"
-msgstr "تم إنشاؤها بما يتوافق مع متطلبات قانون مكافحة الإرهاب في زاتكا"
+msgstr "تم إنشاء هذه الفاتورة وفقاً لمتطلبات هيئة الزكاة والضريبة والجمارك"
 
 #. module: l10n_sa_edi_pos_direct
 #: model_terms:ir.ui.view,arch_db:l10n_sa_edi_pos_direct.view_pos_order_search_zatca

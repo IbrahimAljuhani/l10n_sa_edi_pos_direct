@@ -33,6 +33,26 @@ An optimized replacement for the standard `l10n_sa_edi_pos` module, providing di
 
 ## Changelog
 
+### Version 18.0.1.4.0 — 2026-03-25
+**Contributor:** Ibrahim Aljuhani
+
+**Added:**
+- QR Code moved to bottom of receipt (after order number and date)
+- QR Code size set to 450×450px for better readability
+- Hide "Powered by Odoo" from POS receipt
+- Hide Odoo logo from Customer Display (sidebar and main area)
+
+**Changed:**
+- Improved `MutationObserver` — auto-disconnects after first successful execution for better performance
+- Cleaned `zatca_pos.css` — removed unused dead CSS classes
+- Updated `__manifest__.py` — replaced CSS wildcard with explicit file list
+- Removed empty `customer_display.xml`
+
+**Fixed:**
+- QR Code duplication when ZATCA Direct Mode is enabled
+
+---
+
 ### Version 18.0.1.3.0
 🔧 **Enhanced QR Code Integration:** Improved override of compute_sa_qr_code method to properly use l10n_sa_pos functions  
 🚀 **Code Optimization:** Removed redundant QR generation methods and streamlined date formatting
@@ -49,6 +69,6 @@ This module is designed for **Saudi Arabian businesses** requiring **high-perfor
 
 ---
 
-**Author**: EasyERPS, AMR Hawsawi  
+**Author**: EasyERPS, AMR Hawsawi, Ibrahim Aljuhani  
 **License**: LGPL-3  
 **Website**: https://easyerps.com

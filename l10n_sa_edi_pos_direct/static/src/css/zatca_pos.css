@@ -1,30 +1,27 @@
-/* ====== ZATCA Compliance Footer ====== */
-.zatca-footer {
-    text-align: center;
-    border-top: 1px solid #ddd;
-    padding-top: 8px;
-    margin-top: 12px;
-    font-size: 9px;
+/* ====== إخفاء QR الأصلي من الهيدر ====== */
+.pos-receipt img#qrcode,
+.pos-receipt img.pos-receipt-qrcode,
+img#qrcode.pos-receipt-qrcode {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
 }
 
-.zatca-compliance-ar {
-    font-size: 9px;
-    color: #007B5F;
-    direction: rtl;
-    margin-bottom: 2px;
+/* ====== QR Code في الأسفل ====== */
+.zatca-qr-bottom {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
 }
 
-.zatca-compliance-en {
-    font-size: 8px;
-    color: #666;
-    font-style: italic;
-    margin-bottom: 5px;
+.zatca-qr-img {
+    width: 450px !important;
+    height: 450px !important;
+    min-width: 450px !important;
+    min-height: 450px !important;
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
-
-.zatca-phase {
-    font-size: 10px;
-    font-weight: bold;
-    color: #007B5F;
-    direction: rtl;
-}
-

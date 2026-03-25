@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
 
-    <!-- ZATCA Compliance Footer -->
-    <t t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension">
-        <xpath expr="//div[hasclass('pos-receipt')]" position="inside">
-            <div class="zatca-footer" t-if="props.data.zatca_direct">
-                <div class="zatca-compliance">
-                    <!-- <div class="zatca-compliance-ar">
-                        تم إنشاء هذه الفاتورة وفقاً لمتطلبات هيئة الزكاة والضريبة والجمارك
-                    </div> -->
-                    <div class="zatca-compliance-en">
-                        Generated in compliance with ZATCA requirements
-                    </div>
-                </div>
-                <div class="zatca-phase">المرحلة الثانية - الربط والتكامل</div>
-            </div>
+    <!-- إخفاء QR من الهيدر عند direct mode + إخفاء Powered by Odoo -->
+    <t t-inherit="l10n_sa_pos.ReceiptHeader" t-inherit-mode="extension">
+        <xpath expr="//img[@id='qrcode']" position="replace">
+            <img t-if="props.data.qr_code and !props.data.zatca_direct"
+                 id="qrcode"
+                 t-att-src="props.data.qr_code"
+                 class="pos-receipt-qrcode"/>
         </xpath>
+    </t>
+
+    <t t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension">
+
+        <!-- إخفاء Powered by Odoo من الإيصال -->
+        <xpath expr="//p[text()='Powered by Odoo']" position="replace"/>
+
+        <!-- إضافة QR في الأسفل بعد div الذي يحتوي order-date -->
+        <xpath expr="//div[@id='order-date']/.." position="after">
+            <t t-if="props.data.zatca_direct and props.data.qr_code">
+                <div class="zatca-qr-bottom">
+                    <img t-att-src="props.data.qr_code"
+                         class="zatca-qr-img"
+                         alt="ZATCA QR Code"/>
+                </div>
+            </t>
+        </xpath>
+
     </t>
 
 </templates>

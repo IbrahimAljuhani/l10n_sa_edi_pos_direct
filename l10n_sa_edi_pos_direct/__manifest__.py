@@ -4,7 +4,7 @@
 {
     'name': 'Saudi Arabia - POS Direct ZATCA Integration',
     'countries': ['sa'],
-    'version': "18.0.1.3.0",
+    'version': "18.0.1.4.0",
     'category': 'Accounting/Localizations/Point of Sale',
     'summary': """
         Direct ZATCA integration for POS - Local generation with async reporting
@@ -30,7 +30,7 @@ Technical Implementation:
 - Optimized for high-volume retail environments
 
     """,
-    'author': 'EasyERPS, AMR Hawsawi',
+    'author': 'EasyERPS, AMR Hawsawi, Ibrahim Aljuhani',
     'website': 'https://easyerps.com',
     'license': 'LGPL-3',
     'depends': [
@@ -48,10 +48,14 @@ Technical Implementation:
     ],
     'assets': {
         'point_of_sale._assets_pos': [
-            'l10n_sa_edi_pos_direct/static/src/css/*.css',
+            'l10n_sa_edi_pos_direct/static/src/css/zatca_pos.css',
+            'l10n_sa_edi_pos_direct/static/src/css/zatca_refund_popup.css',
             'l10n_sa_edi_pos_direct/static/src/overrides/models/*.js',
             'l10n_sa_edi_pos_direct/static/src/overrides/components/**/*.js',
             'l10n_sa_edi_pos_direct/static/src/overrides/components/**/*.xml',
+        ],
+        'point_of_sale.customer_display_assets': [
+            'l10n_sa_edi_pos_direct/static/src/css/customer_display.css',
         ],
     },
     'installable': True,

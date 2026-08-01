@@ -536,7 +536,19 @@ class PosOrder(models.Model):
                 invoice_data['lines'].append(line_data)
                 total_lines_without_tax += line_total_without_tax
                 line_number += 1
-            
+
+            # ZATCA BR-16: an Invoice shall have at least one InvoiceLine. If every line
+            # on this order was a negative-price discount/promo product, all of them were
+            # diverted to allowance_charge_vals above and none remain here - the resulting
+            # XML would have zero <cac:InvoiceLine> elements and be rejected by ZATCA with
+            # a confusing schema/BR-S-08 error. Fail early with a clear message instead.
+            if not invoice_data['lines']:
+                raise UserError(_(
+                    "Cannot submit order %s to ZATCA: all order lines are negative-price "
+                    "discount/promo products with no regular product line. ZATCA requires "
+                    "at least one Invoice line (BR-16). Please review this order manually."
+                ) % self.name)
+
             # EN16931 / ZATCA monetary totals:
             # LineExtension = sum of positive InvoiceLines
             # AllowanceTotal = document discounts

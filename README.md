@@ -33,6 +33,14 @@ An optimized replacement for the standard `l10n_sa_edi_pos` module, providing di
 
 ## Changelog
 
+### Version 18.0.1.4.3 — 2026-08-02
+**Contributor:** Ibrahim Aljuhani
+
+**Fixed:**
+- ZATCA BR-16 / BR-S-08 rejection ("An Invoice shall have at least one Invoice line") on orders where every line is a negative-price discount/promo product with no regular product line. The AllowanceCharge logic added in 18.0.1.4.1 diverted all negative lines out of the invoice lines list, producing zero `InvoiceLine` elements and a malformed XML rejected by ZATCA. Confirmed against real rejected submissions (2026-04-02, 2026-04-16, 2026-06-06 — all orders with no actual product line). Now raises a clear error before submission instead of sending an invalid document.
+
+---
+
 ### Version 18.0.1.4.2 — 2026-08-02
 **Contributor:** Ibrahim Aljuhani
 

@@ -2,6 +2,16 @@
 
 ---
 
+## [18.0.1.4.3] — 2026-08-02
+
+### Contributors
+- Ibrahim Aljuhani
+
+**Fixed:**
+- ZATCA BR-16 / BR-S-08 rejection ("An Invoice shall have at least one Invoice line") on orders where every line is a negative-price discount/promo product with no regular product line. The AllowanceCharge logic added in 18.0.1.4.1 diverts all negative lines out of `invoice_data['lines']`, so an all-discount order produced zero `InvoiceLine` elements and a malformed XML that ZATCA rejected with a confusing schema error. Confirmed against real rejected submissions (2026-04-02, 2026-04-16, 2026-06-06 — all orders with no actual product line). Now raises a clear `UserError` before submission instead of sending an invalid document.
+
+---
+
 ## [18.0.1.4.2] — 2026-08-02
 
 ### Contributors

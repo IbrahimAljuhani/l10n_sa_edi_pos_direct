@@ -1,14 +1,3 @@
-/* ====== إخفاء QR الأصلي من الهيدر ====== */
-.pos-receipt img#qrcode,
-.pos-receipt img.pos-receipt-qrcode,
-img#qrcode.pos-receipt-qrcode {
-    display: none !important;
-    visibility: hidden !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-}
-
 /* ====== QR Code في الأسفل ====== */
 .zatca-qr-bottom {
     display: flex;
@@ -17,11 +6,10 @@ img#qrcode.pos-receipt-qrcode {
 }
 
 .zatca-qr-img {
-    width: 450px !important;
-    height: 450px !important;
-    min-width: 450px !important;
-    min-height: 450px !important;
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    aspect-ratio: 1 / 1;
     display: block;
-    image-rendering: pixelated;
     image-rendering: crisp-edges;
 }

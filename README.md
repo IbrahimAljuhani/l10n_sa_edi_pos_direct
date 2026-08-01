@@ -33,6 +33,33 @@ An optimized replacement for the standard `l10n_sa_edi_pos` module, providing di
 
 ## Changelog
 
+### Version 18.0.1.4.2 — 2026-08-02
+**Contributor:** Ibrahim Aljuhani
+
+**Fixed:**
+- `order_receipt.xml` was extending a non-existent template (`l10n_sa_pos.ReceiptHeader`) — corrected to `point_of_sale.ReceiptHeader`, so the header-QR removal for direct-mode orders now applies at the QWeb level instead of relying entirely on CSS/JS force-hiding
+- `.zatca-qr-img` used a fixed 450px size with `min-width`/`min-height`, which overflowed Odoo's actual print container (266px in `@media print`) — could clip the QR on real printed receipts. Changed to `width: 100%; max-width: 300px;` so it scales down to fit the real paper width
+- Removed duplicate `image-rendering` declaration (`pixelated` was dead code, overridden by `crisp-edges`)
+
+**Removed:**
+- Redundant `MutationObserver` in `pos_store.js` that force-hid the header QR via inline styles — no longer needed now that the QWeb-level fix above correctly omits the header QR for direct-mode orders
+
+---
+
+### Version 18.0.1.4.1 — 2026-08-02
+**Contributor:** Ibrahim Aljuhani
+
+**Fixed:**
+- BR-KSA-F-04 violation: negative-price promo/discount lines are now emitted as document-level `AllowanceCharge` (reason code 95) instead of negative `InvoiceLine` amounts
+- Line `unit_price` now derived from `price_subtotal` instead of raw `price_unit`, keeping `InvoiceLine`/`Price` consistent with line-level POS discounts (BR-KSA-EN16931-11)
+- Duplicate ZATCA submission handling for HTTP 409 ("Invoice was already Reported successfully earlier"): detection now matches the actual ZATCA reporting API response shape (`validationResults.errorMessages[].message`) instead of a top-level `error` key and enum-style strings that don't exist in the real response
+- `batch_submit_pending_zatca` now commits and persists `error` status/message per order instead of losing state on exception
+
+**Removed:**
+- Unused `queue_job` dependency from `__manifest__.py` — background processing is done via `ir.cron`, not `queue_job`; will be reintroduced once actually wired up and tested
+
+---
+
 ### Version 18.0.1.4.0 — 2026-03-25
 **Contributor:** Ibrahim Aljuhani
 

@@ -4,7 +4,7 @@
 {
     'name': 'Saudi Arabia - POS Direct ZATCA Integration',
     'countries': ['sa'],
-    'version': "18.0.1.4.0",
+    'version': "18.0.1.4.2",
     'category': 'Accounting/Localizations/Point of Sale',
     'summary': """
         Direct ZATCA integration for POS - Local generation with async reporting
@@ -26,7 +26,7 @@ Key Features:
 Technical Implementation:
 - Local UBL XML generation
 - Client-side digital signatures using WebCrypto API
-- Background job queue for ZATCA submission
+- Scheduled cron-based batch submission and retry for ZATCA reporting
 - Optimized for high-volume retail environments
 
     """,
@@ -37,7 +37,6 @@ Technical Implementation:
         'point_of_sale',
         'l10n_sa_pos',
         'l10n_sa_edi',
-        'queue_job',  # For background processing
     ],
     'data': [
         'security/ir.model.access.csv',

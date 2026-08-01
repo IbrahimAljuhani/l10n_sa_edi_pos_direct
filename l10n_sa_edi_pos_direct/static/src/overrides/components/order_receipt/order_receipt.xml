@@ -2,7 +2,7 @@
 <templates id="template" xml:space="preserve">
 
     <!-- إخفاء QR من الهيدر عند direct mode + إخفاء Powered by Odoo -->
-    <t t-inherit="l10n_sa_pos.ReceiptHeader" t-inherit-mode="extension">
+    <t t-inherit="point_of_sale.ReceiptHeader" t-inherit-mode="extension">
         <xpath expr="//img[@id='qrcode']" position="replace">
             <img t-if="props.data.qr_code and !props.data.zatca_direct"
                  id="qrcode"

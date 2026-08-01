@@ -2,6 +2,37 @@
 
 ---
 
+## [18.0.1.4.2] — 2026-08-02
+
+### Contributors
+- Ibrahim Aljuhani
+
+**Fixed:**
+- `order_receipt.xml` extended a non-existent template (`l10n_sa_pos.ReceiptHeader`) — corrected to `point_of_sale.ReceiptHeader` (the actual template `l10n_sa_pos` itself patches), so the header-QR removal for direct-mode orders now applies at the QWeb level instead of relying entirely on CSS/JS force-hiding
+- `.zatca-qr-img` used a fixed `450px` size with `min-width`/`min-height`, which overflows Odoo's actual print container (`.render-container .pos-receipt` is `266px` in `@media print` per `point_of_sale`'s own `receipt_screen.scss`) — could clip the QR on real printed receipts. Changed to `width: 100%; max-width: 300px;` so it scales down to fit the real paper width instead of overflowing
+- Removed duplicate `image-rendering` declaration (`pixelated` was dead code, overridden by `crisp-edges` on the next line)
+
+**Removed:**
+- Redundant `MutationObserver` in `pos_store.js` that force-hid the header QR via inline styles — no longer needed now that the QWeb-level fix above correctly omits the header QR for direct-mode orders
+
+---
+
+## [18.0.1.4.1] — 2026-08-02
+
+### Contributors
+- Ibrahim Aljuhani
+
+**Fixed:**
+- BR-KSA-F-04 violation: negative-price promo/discount lines are now emitted as document-level `AllowanceCharge` (reason code 95) instead of negative `InvoiceLine` amounts
+- Line `unit_price` now derived from `price_subtotal` instead of raw `price_unit`, keeping `InvoiceLine`/`Price` consistent with line-level POS discounts (BR-KSA-EN16931-11)
+- Duplicate ZATCA submission handling for HTTP 409 ("Invoice was already Reported successfully earlier"): detection now matches the actual ZATCA reporting API response shape (`validationResults.errorMessages[].message`), since the upstream fix checked a top-level `error` key and enum-style strings that do not exist in the real response
+- `batch_submit_pending_zatca` now commits and persists `error` status/message per order instead of losing state on exception
+
+**Removed:**
+- Unused `queue_job` dependency from `__manifest__.py` — background processing is done via `ir.cron`, not `queue_job`; no `with_delay`/`@job` usage existed in the codebase. Will be reintroduced once actually wired up and tested.
+
+---
+
 ## [18.0.1.4.0] — 2026-03-25
 
 ### Contributors

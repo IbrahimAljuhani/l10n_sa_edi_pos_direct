@@ -3,24 +3,6 @@
 import { PosStore } from "@point_of_sale/app/store/pos_store";
 import { patch } from "@web/core/utils/patch";
 
-// إخفاء QR الأصلي - يوقف نفسه بعد أول تنفيذ ناجح
-function startReceiptObserver() {
-    const observer = new MutationObserver(() => {
-        const qr = document.querySelector('img#qrcode.pos-receipt-qrcode');
-        if (qr) {
-            qr.style.setProperty('display', 'none', 'important');
-            observer.disconnect();
-        }
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', startReceiptObserver);
-} else {
-    startReceiptObserver();
-}
-
 patch(PosStore.prototype, {
 
     // Load ZATCA configuration after server data is processed

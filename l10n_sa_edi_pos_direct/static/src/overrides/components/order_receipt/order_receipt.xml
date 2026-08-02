@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
 
-    <!-- إخفاء QR من الهيدر عند direct mode + إخفاء Powered by Odoo -->
-    <t t-inherit="point_of_sale.ReceiptHeader" t-inherit-mode="extension">
-        <xpath expr="//img[@id='qrcode']" position="replace">
-            <img t-if="props.data.qr_code and !props.data.zatca_direct"
-                 id="qrcode"
-                 t-att-src="props.data.qr_code"
-                 class="pos-receipt-qrcode"/>
-        </xpath>
-    </t>
+    <!-- ملاحظة: إخفاء QR الهيدر و"Powered by Odoo" يتم عبر CSS فقط (zatca_pos.css)،
+         وليس عبر xpath/t-inherit، لأن استهداف عناصر l10n_sa_pos.ReceiptHeader /
+         point_of_sale.OrderReceipt بـ xpath ثبت أنه غير موثوق في هذه البيئة
+         (فشل مرتين بأخطاء OwlError مختلفة عند التشغيل الفعلي) ويكسر شاشة الإيصال كاملة. -->
 
     <t t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension">
 
-        <!-- إخفاء Powered by Odoo من الإيصال -->
-        <xpath expr="//p[text()='Powered by Odoo']" position="replace"/>
-
         <!-- إضافة QR في الأسفل بعد div الذي يحتوي order-date -->
+        <!-- ملاحظة: "Powered by Odoo" يُخفى عبر CSS (zatca_pos.css) لا XML، لأن نص العنصر
+             يُترجم قبل تطبيق الـ inheritance، فمطابقة xpath بالنص الحرفي تفشل وتكسر
+             شاشة الإيصال بالكامل (OwlError) عند تشغيل الواجهة بغير الإنجليزية. -->
         <xpath expr="//div[@id='order-date']/.." position="after">
             <t t-if="props.data.zatca_direct and props.data.qr_code">
                 <div class="zatca-qr-bottom">

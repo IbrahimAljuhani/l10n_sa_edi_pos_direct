@@ -33,6 +33,16 @@ An optimized replacement for the standard `l10n_sa_edi_pos` module, providing di
 
 ## Changelog
 
+### Version 18.0.1.4.4 — 2026-08-02
+**Contributor:** Ibrahim Aljuhani
+
+**Fixed:**
+- Critical: an xpath matching the literal English text "Powered by Odoo" crashed the entire receipt screen with an uncaught OWL error on any non-English POS interface (text is translated before inheritance is applied, so the match failed) — reported as a blank white screen after payment with no receipt preview/auto-print. Replaced with a structural CSS rule that doesn't depend on translated text.
+- Critical: the `point_of_sale.ReceiptHeader` xpath fix from 18.0.1.4.2 also crashed the receipt screen in production (`img#qrcode` element not found at inheritance-resolution time in this environment). Two consecutive xpath/t-inherit failures on this template means it isn't reliable in this deployment. Removed the `t-inherit` block entirely; header-QR hiding is now done purely via CSS, which cannot crash template rendering.
+- Confirmed working: receipt preview renders correctly after both fixes above.
+
+---
+
 ### Version 18.0.1.4.3 — 2026-08-02
 **Contributor:** Ibrahim Aljuhani
 
@@ -54,49 +64,7 @@ An optimized replacement for the standard `l10n_sa_edi_pos` module, providing di
 
 ---
 
-### Version 18.0.1.4.1 — 2026-08-02
-**Contributor:** Ibrahim Aljuhani
-
-**Fixed:**
-- BR-KSA-F-04 violation: negative-price promo/discount lines are now emitted as document-level `AllowanceCharge` (reason code 95) instead of negative `InvoiceLine` amounts
-- Line `unit_price` now derived from `price_subtotal` instead of raw `price_unit`, keeping `InvoiceLine`/`Price` consistent with line-level POS discounts (BR-KSA-EN16931-11)
-- Duplicate ZATCA submission handling for HTTP 409 ("Invoice was already Reported successfully earlier"): detection now matches the actual ZATCA reporting API response shape (`validationResults.errorMessages[].message`) instead of a top-level `error` key and enum-style strings that don't exist in the real response
-- `batch_submit_pending_zatca` now commits and persists `error` status/message per order instead of losing state on exception
-
-**Removed:**
-- Unused `queue_job` dependency from `__manifest__.py` — background processing is done via `ir.cron`, not `queue_job`; will be reintroduced once actually wired up and tested
-
----
-
-### Version 18.0.1.4.0 — 2026-03-25
-**Contributor:** Ibrahim Aljuhani
-
-**Added:**
-- QR Code moved to bottom of receipt (after order number and date)
-- QR Code size set to 450×450px for better readability
-- Hide "Powered by Odoo" from POS receipt
-- Hide Odoo logo from Customer Display (sidebar and main area)
-
-**Changed:**
-- Improved `MutationObserver` — auto-disconnects after first successful execution for better performance
-- Cleaned `zatca_pos.css` — removed unused dead CSS classes
-- Updated `__manifest__.py` — replaced CSS wildcard with explicit file list
-- Removed empty `customer_display.xml`
-
-**Fixed:**
-- QR Code duplication when ZATCA Direct Mode is enabled
-
----
-
-### Version 18.0.1.3.0
-🔧 **Enhanced QR Code Integration:** Improved override of compute_sa_qr_code method to properly use l10n_sa_pos functions  
-🚀 **Code Optimization:** Removed redundant QR generation methods and streamlined date formatting
-
-### Version 18.0.1.2.0
-🔧 **Fixed Arabic Character Encoding:** Resolved btoa() InvalidCharacterError when using Arabic language interface
-
-### Version 18.0.1.1.0
-✅ **Added ZATCA Refund Features:** Interactive refund reason popup with 6 predefined codes and full ZATCA compliance (BR-KSA-17, BR-KSA-F-04)
+For older versions and full history, see [CHANGELOG.md](https://github.com/IbrahimAljuhani/l10n_sa_edi_pos_direct/blob/18.0/CHANGELOG.md).
 
 ## Support
 

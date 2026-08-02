@@ -2,6 +2,18 @@
 
 ---
 
+## [18.0.1.4.4] — 2026-08-02
+
+### Contributors
+- Ibrahim Aljuhani
+
+**Fixed:**
+- Critical: `<xpath expr="//p[text()='Powered by Odoo']" position="replace"/>` in `order_receipt.xml` crashed the entire receipt screen with an uncaught `OwlError` ("Element cannot be located in element tree") on any non-English POS interface, because the text node is translated before QWeb inheritance is applied, so the literal English match fails. Reported by user: blank white screen after payment, receipt preview/auto-print never appeared. Replaced the text-matching xpath with a structural CSS rule (`.pos-receipt-order-data > p { display: none !important; }`) that doesn't depend on translated text.
+- Critical: the `t-inherit="point_of_sale.ReceiptHeader"` xpath fix from 18.0.1.4.2 also crashed the receipt screen with `OwlError: Element '<xpath expr="//img[@id='qrcode']" ...>' cannot be located in element tree` — the `img#qrcode` element that `l10n_sa_pos` is expected to insert wasn't present at inheritance-resolution time in this environment. Two consecutive xpath/t-inherit failures on this template means xpath-based inheritance against `point_of_sale.ReceiptHeader` is not reliable in this deployment. Removed the `t-inherit` block entirely; header-QR hiding is now done purely via CSS (`img#qrcode` force-hide, restored in `zatca_pos.css`), which cannot crash template rendering since it doesn't touch QWeb inheritance at all.
+- Confirmed working: receipt preview renders correctly after both fixes above.
+
+---
+
 ## [18.0.1.4.3] — 2026-08-02
 
 ### Contributors

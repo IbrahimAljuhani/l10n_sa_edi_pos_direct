@@ -33,6 +33,15 @@ An optimized replacement for the standard `l10n_sa_edi_pos` module, providing di
 
 ## Changelog
 
+### Version 18.0.1.5.0 — 2026-08-02
+**Contributor:** Ibrahim Aljuhani
+
+**Added:**
+- Re-added `queue_job` (OCA) dependency and wired it into `_schedule_zatca_submission`: orders are now submitted to ZATCA near-instantly via `with_delay()` instead of waiting for the next cron tick. Verified end-to-end on the test server (jobrunner starts on boot, a test job completed in ~75ms).
+- Cron jobs are kept as a fallback safety net rather than the primary submission path. Job dispatch failures are logged only and never block the POS payment flow.
+
+---
+
 ### Version 18.0.1.4.4 — 2026-08-02
 **Contributor:** Ibrahim Aljuhani
 
@@ -48,19 +57,6 @@ An optimized replacement for the standard `l10n_sa_edi_pos` module, providing di
 
 **Fixed:**
 - ZATCA BR-16 / BR-S-08 rejection ("An Invoice shall have at least one Invoice line") on orders where every line is a negative-price discount/promo product with no regular product line. The AllowanceCharge logic added in 18.0.1.4.1 diverted all negative lines out of the invoice lines list, producing zero `InvoiceLine` elements and a malformed XML rejected by ZATCA. Confirmed against real rejected submissions (2026-04-02, 2026-04-16, 2026-06-06 — all orders with no actual product line). Now raises a clear error before submission instead of sending an invalid document.
-
----
-
-### Version 18.0.1.4.2 — 2026-08-02
-**Contributor:** Ibrahim Aljuhani
-
-**Fixed:**
-- `order_receipt.xml` was extending a non-existent template (`l10n_sa_pos.ReceiptHeader`) — corrected to `point_of_sale.ReceiptHeader`, so the header-QR removal for direct-mode orders now applies at the QWeb level instead of relying entirely on CSS/JS force-hiding
-- `.zatca-qr-img` used a fixed 450px size with `min-width`/`min-height`, which overflowed Odoo's actual print container (266px in `@media print`) — could clip the QR on real printed receipts. Changed to `width: 100%; max-width: 300px;` so it scales down to fit the real paper width
-- Removed duplicate `image-rendering` declaration (`pixelated` was dead code, overridden by `crisp-edges`)
-
-**Removed:**
-- Redundant `MutationObserver` in `pos_store.js` that force-hid the header QR via inline styles — no longer needed now that the QWeb-level fix above correctly omits the header QR for direct-mode orders
 
 ---
 

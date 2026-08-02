@@ -2,6 +2,18 @@
 
 ---
 
+## [18.0.1.5.0] — 2026-08-02
+
+### Contributors
+- Ibrahim Aljuhani
+
+**Added:**
+- Re-added `queue_job` (OCA) dependency and wired it into `_schedule_zatca_submission`: orders are now submitted to ZATCA near-instantly via `with_delay()` instead of waiting for the next cron tick. Verified end-to-end on the test server: jobrunner thread starts on boot (`server_wide_modules = web,queue_job`), a manually dispatched job reached `state = done` within ~75ms.
+- `batch_submit_pending_zatca` / `cron_retry_failed_zatca` cron jobs are kept as-is and now act as a fallback safety net (in case the immediate job was never enqueued or the runner was briefly unavailable) rather than the primary submission path.
+- Job dispatch is wrapped in try/except so a `with_delay()` failure only logs a warning and never blocks or rolls back the POS payment flow.
+
+---
+
 ## [18.0.1.4.4] — 2026-08-02
 
 ### Contributors

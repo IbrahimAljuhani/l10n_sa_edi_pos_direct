@@ -276,6 +276,21 @@ class PosOrder(models.Model):
         self.l10n_sa_zatca_status = 'queued'
         _logger.info(f"ZATCA: Order {self.name} queued for submission - will be processed by next cron run")
 
+        # Also enqueue an immediate job via queue_job for near-instant submission,
+        # instead of waiting for the next cron tick. This must never block or roll
+        # back the POS payment flow, so any dispatch failure is only logged - the
+        # cron (batch_submit_pending_zatca) still picks up 'queued' orders as a
+        # fallback if the job was never enqueued or the runner was unavailable.
+        try:
+            self.with_delay(
+                description=f"ZATCA submission for order {self.name}",
+            ).submit_to_zatca_reporting()
+        except Exception as e:
+            _logger.warning(
+                f"ZATCA: Failed to enqueue immediate job for order {self.name}, "
+                f"will rely on cron fallback: {e}"
+            )
+
     def submit_to_zatca_reporting(self):
         """Submit simplified invoice to ZATCA reporting API"""
         try:
